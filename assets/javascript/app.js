@@ -1,103 +1,163 @@
+var animals = ["Cat", "Shark", "Whale", "Panda", "Bear", "Giraffe"];
+// ratings G/PG/PG-13/R
+
+// make buttons for every animal
+function makeBtns() {
+    $("#btnSpam").empty();
+    for (var i = 0; i < animals.length; i++) {
+        var animalBtn = $("<button>").attr("class", "btn btn-info m-3");
+        animalBtn.addClass("letter-button letter letter-button-color");
+        animalBtn.attr({
+            "data-animal": animals[i],
+            "onclick": "btnAnimal()",
+        });
+        animalBtn.text(animals[i]);
+        $("#btnSpam").append(animalBtn);
+    }
+};
+
+// if enter is pressed in the input field act as if it was submitted
+var userInput = document.getElementById("get-animal");
+userInput.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("animal-submit").click();
+    }
+});
 
 
+// when animal button is clicked populate still-gifs
+function gimmeGifs(animal) {
+
+    $("#gifSpam").empty();
+
+    var queryItem = animal;
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + queryItem + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13";
 
 
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (response) {
+
+
+        for (var i = 0; i < response.data.length; i++) {
+
+            var imgSpam = $("<img>");
+
+            imgSpam.addClass("imgs");
+            imgSpam.attr({
+                "src": response.data[i].images.original_still.url,
+                "data-state": "still",
+                "data-still-url": response.data[i].images.original_still.url,
+                "data-gif-url": response.data[i].images.original.url,
+                "onclick": "stateTrans()",
+            });
+
+            var divBox = $("<div>")
+            divBox.addClass("divBox");
+            var newnew = $("<p>").text("Rating : " + response.data[i].rating);
+            newnew.addClass("rating");
+            divBox.append(newnew);
+            divBox.append(imgSpam);
+            $("#gifSpam").prepend(divBox);
+
+        }
+
+        console.log(response);
+    });
+
+};
+
+// add the new animal from the users input
+function usersAnimal() {
+    $("#error").empty();
+
+    var userAnimal = $("#get-animal").val();
+    console.log(userAnimal);
+    var lowerAnimals = [];
+    for (var index = 0; index < animals.length; index++) {
+        lowerAnimals.push(animals[index].toLowerCase());
+
+    }
+    console.log(lowerAnimals);
+
+
+    $.ajax({
+        url: "http://api.giphy.com/v1/gifs/search?q=" + userAnimal + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13",
+        method: "GET"
+    }).then(function (response) {
+        if (userAnimal != "" && !lowerAnimals.includes(userAnimal) && response.data.length != 0) {
+            animals.push(userAnimal);
+            makeBtns();
+        } else if (response.data.length == 0) {
+            $("#error").text("That animal didn't pull up any results!")
+        } else {
+            $("#error").text("That animal already is available!")
+        }
+    });
+
+
+}
+
+//grab the animal name for the button and give it to gimmeGifs
+function btnAnimal() {
+    $("#error").empty();
+    var defaultBtnAnimal = event.target.getAttribute("data-animal")
+    gimmeGifs(defaultBtnAnimal);
+}
+
+//make still images turn into gifs and vise versa
+function stateTrans() {
+    $("#error").empty();
+    var currentState = event.target.getAttribute("data-state");
+    var currentStillUrl = event.target.getAttribute("data-still-url");
+    var currentGifUrl = event.target.getAttribute("data-gif-url");
+
+    if (currentState == "still") {
+        $(event.target).attr({
+            "data-state": "gifMode",
+            "src": currentGifUrl,
+        });
+    } else {
+        $(event.target).attr({
+            "data-state": "still",
+            "src": currentStillUrl,
+        });
+    }
+}
+
+
+//initial run to make the default animals appear
+makeBtns();
+
+// TODO: below-
+// add favorites to the main array. assign it an id to be used for running it and coloring it red
+// create a button on each gif div that toggles on or off for favorites
+// if toggle is on push it into a new array.
+// when favoites is clicked have it run the gimme gifs but have an if seeing if favorites was clicked then return out after.
 
 /* # GifTastic
 
-### Overview
-
-In this assignment, you'll use the GIPHY API to make a dynamic web page that populates with gifs of your choice. To finish this task, you must call the GIPHY API and use JavaScript and jQuery to change the HTML of your site.
+my giphy API key below -
+dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN
 
 ![GIPHY](Images/1-giphy.jpg)
 
-### Before You Begin
-
-1. **Hit the GIPHY API**.
-   * Fool around with the GIPHY API. [Giphy API](https://developers.giphy.com/docs/).
-   * Be sure to read about these GIPHY parameters (hint, hint):
-     * `q`
-     * `limit`
-     * `rating`
-   * Like many APIs, GIPHY requires developers to use a key to access their API data. To use the GIPHY API, you'll need a GIPHY account (don't worry, it's free!) and then obtain an API Key by [creating an app](https://developers.giphy.com/dashboard/?create=true).
-   * Make sure you switch the protocol in the query URL from **`http to https`**, or the app may not work properly when deployed to Github Pages.
+[Giphy API](https://developers.giphy.com/docs/).
 
 2. **[Watch the demo video](https://youtu.be/BqreERTLjgQ)**
 
-   * You should have a high-level understanding of how this assignment works before attempting to code it.
-
-### Commits
-
-Having an active and healthy commit history on GitHub is important for your future job search. It is also extremely important for making sure your work is saved in your repository. If something breaks, committing often ensures you are able to go back to a working version of your code.
-
-* Committing often is a signal to employers that you are actively working on your code and learning.
-
-  * We use the mantra “commit early and often.”  This means that when you write code that works, add it and commit it!
-
-  * Numerous commits allow you to see how your app is progressing and give you a point to revert to if anything goes wrong.
-
-* Be clear and descriptive in your commit messaging.
-
-  * When writing a commit message, avoid vague messages like "fixed." Be descriptive so that you and anyone else looking at your repository knows what happened with each commit.
-
-* We would like you to have well over 200 commits by graduation, so commit early and often!
-
-### Submission on BCS
-
-* Please submit both the deployed Github.io link to your homework AND the link to the Github Repository!
-
-### Instructions
-
-1. Before you can make any part of your site work, you need to create an array of strings, each one related to a topic that interests you. Save it to a variable called `topics`.
-   * We chose animals for our theme, but you can make a list to your own liking.
-
-2. Your app should take the topics in this array and create buttons in your HTML.
-   * Try using a loop that appends a button for each string in the array.
-
-3. When the user clicks on a button, the page should grab 10 static, non-animated gif images from the GIPHY API and place them on the page.
-
-4. When the user clicks one of the still GIPHY images, the gif should animate. If the user clicks the gif again, it should stop playing.
-
-5. Under every gif, display its rating (PG, G, so on).
-   * This data is provided by the GIPHY API.
-   * Only once you get images displaying with button presses should you move on to the next step.
-
-6. Add a form to your page that takes a value from a user input box and adds it to your `topics` array. Then make a function call that takes each topic in the array and remakes the buttons on the page.
-
-7. Deploy your assignment to Github Pages.
-
-8. **Rejoice**! You just made something really cool.
-
-- - -
-
-### Minimum Requirements
-
-Attempt to complete homework assignment as described in instructions. If unable to complete certain portions, please pseudocode these portions to describe what remains to be completed. Adding a README.md as well as adding this homework to your portfolio are required as well and more information can be found below.
-
-- - -
-
-### Bonus Goals
-
-1. Ensure your app is fully mobile responsive.
+### Instructions - bonus
 
 2. Allow users to request additional gifs to be added to the page.
    * Each request should ADD 10 gifs to the page, NOT overwrite the existing gifs.
-
-3. List additional metadata (title, tags, etc) for each gif in a clean and readable format.
-
-4. Integrate this search with additional APIs such as OMDB, or Bands in Town. Be creative and build something you are proud to showcase in your portfolio
 
 5. Allow users to add their favorite gifs to a `favorites` section.
    * This should persist even when they select or add a new topic.
    * If you are looking for a major challenge, look into making this section persist even when the page is reloaded(via localStorage or cookies).
 
-### Reminder: Submission on BCS
-
-* Please submit both the deployed Github.io link to your homework AND the link to the Github Repository!
-
-- - -
-
-### Create a README.md
+   ### Create a README.md
 
 Add a `README.md` to your repository describing the project. Here are some resources for creating your `README.md`. Here are some resources to help you along the way:
 
