@@ -1,5 +1,7 @@
 var animals = ["Favorites", "Cat", "Shark", "Whale", "Panda", "Bear", "Giraffe"];
 var favorites = [];
+var lastClicked = "";
+var lastStartPoint = 0;
 // ratings G/PG/PG-13/R
 
 // make buttons for every animal
@@ -43,13 +45,23 @@ function gimmeGifs(animal) {
         for (var index = 0; index < favorites.length; index++) {
             $("#gifSpam").prepend(favorites[index]);
         }
-
+        lastClicked = "null";
+        lastStartPoint = 0;
         return
     }
-    $("#gifSpam").empty();
-
     var queryItem = animal;
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + queryItem + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13";
+
+
+    console.log(queryItem);
+    console.log(lastClicked);
+    if (queryItem == lastClicked) {
+        lastStartPoint += 10;
+    } else {
+        $("#gifSpam").empty();
+        lastStartPoint = 0;
+    }
+
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + queryItem + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13&offset=" + lastStartPoint;
 
     $.ajax({
         url: queryURL,
@@ -70,7 +82,7 @@ function gimmeGifs(animal) {
                 "onclick": "stateTrans()",
             });
 
-            var divBox = $("<div>").addClass(animal + "-" + i + "div");
+            var divBox = $("<div>").addClass(animal + "-" + (lastStartPoint+i) + "div");
             divBox.addClass("divBox");
             var newnew = $("<p>").text("Rating : " + response.data[i].rating);
             newnew.addClass("rating");
@@ -78,13 +90,13 @@ function gimmeGifs(animal) {
             divBox.append(imgSpam);
             var likeBefore = false;
             for (let index = 0; index < favorites.length; index++) {
-                if (favorites[index][0].childNodes[2].className == (animal + "-" + i)) {
+                if (favorites[index][0].childNodes[2].className == (animal + "-" + (lastStartPoint+i))) {
                     var heart = $("<button>").attr({
                         "id": "heartBtn",
                         "onclick": "addToFav()",
                         "data-liked": "yes"
                     }).html("<i class='fas fa-heart' onclick='addToFav()' data-liked='child'></i>"); // fas fa-heart for solid
-                    heart.addClass(animal + "-" + i);
+                    heart.addClass(animal + "-" + (lastStartPoint+i));
                     divBox.append(heart);
                     likeBefore = true;
                 }
@@ -95,7 +107,7 @@ function gimmeGifs(animal) {
                     "onclick": "addToFav()",
                     "data-liked": "no"
                 }).html("<i class='far fa-heart' onclick='addToFav()' data-liked='child'></i>"); // fas fa-heart for solid
-                heart.addClass(animal + "-" + i);
+                heart.addClass(animal + "-" + (lastStartPoint+i));
                 divBox.append(heart);
             }
             $("#gifSpam").prepend(divBox);
@@ -103,6 +115,8 @@ function gimmeGifs(animal) {
         }
 
     });
+
+    lastClicked = animal;
 
 };
 
