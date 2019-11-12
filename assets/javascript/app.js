@@ -112,10 +112,12 @@ function gimmeGifs(animal) {
 function usersAnimal() {
     $("#error").empty();
 
-    var userAnimal = $("#get-animal").val();
+    var userAnimal = $("#get-animal").val().trim();
+    $("#get-animal").val("");
     console.log(userAnimal);
     var lowerAnimals = [];
     for (var index = 0; index < animals.length; index++) {
+
         lowerAnimals.push(animals[index].toLowerCase());
 
     }
@@ -126,7 +128,7 @@ function usersAnimal() {
         url: "http://api.giphy.com/v1/gifs/search?q=" + userAnimal + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13",
         method: "GET"
     }).then(function (response) {
-        if (userAnimal != "" && !lowerAnimals.includes(userAnimal) && response.data.length != 0) {
+        if (userAnimal != "" && !lowerAnimals.includes(userAnimal.toLowerCase()) && response.data.length != 0) {
             animals.push(userAnimal);
             makeBtns();
         } else if (response.data.length == 0) {
@@ -176,7 +178,6 @@ function addToFav() {
     } else {
         var button = event.target;
     }
-    console.log("should be button" + button);
 
 
     if ($(button).attr("data-liked") == "no") {
@@ -262,10 +263,6 @@ dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN
 
 2. Allow users to request additional gifs to be added to the page.
    * Each request should ADD 10 gifs to the page, NOT overwrite the existing gifs.
-
-5. Allow users to add their favorite gifs to a `favorites` section.
-   * This should persist even when they select or add a new topic.
-   * If you are looking for a major challenge, look into making this section persist even when the page is reloaded(via localStorage or cookies).
 
    ### Create a README.md
 

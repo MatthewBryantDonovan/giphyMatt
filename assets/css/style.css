@@ -2,6 +2,25 @@
     box-sizing: border-box;
 }
 
+body {
+    background: url(../images/circle-blues.png);
+}
+
+h1 {
+    color: white;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: teal;
+    font-family: Impact, Haettenschweiler, 'Arial Bold';
+}
+
+#error, .addAnimal {
+    text-align: center;
+    font-size: 2em;
+    color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: lightgray;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
 .imgs {
     height: 150px;
     width: 150px;
@@ -46,5 +65,44 @@
     margin: 25px;
     height: 250px;
     width: 200px;
-    border: 2px black solid;
+    border: 4px solid #8e6463;
+    background: white;
+}
+
+
+/* the 4 below for option 1 */
+/* #gifBtn {
+    background: url(../images/wheat.png);
+}
+
+#btnSpam {
+    background: url(../images/circle-blues.png);
+}
+
+#gifSpam {
+    background: url(../images/morocco-blue.png);
+}
+
+#searchBox, #gif {
+    background: url(../images/morocco.png);
+    border-right: .25em solid #ffc107;
+} */
+
+
+/* the 4 below for option 2 */
+#gifBtn {
+    background: url(../images/wheat.png);
+}
+
+#btnSpam {
+    background: url(../images/wheat.png);
+    border-bottom: 4px solid #8e6463;;
+}
+
+#gifSpam {
+    background: rgba(0, 0, 0, .0);
+}
+
+#searchBox, #gif {
+    background: rgba(0, 0, 0, .0);
 }
