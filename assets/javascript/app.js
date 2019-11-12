@@ -49,7 +49,7 @@ function gimmeGifs(animal) {
     $("#gifSpam").empty();
 
     var queryItem = animal;
-    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + queryItem + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + queryItem + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13";
 
     $.ajax({
         url: queryURL,

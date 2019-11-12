@@ -7,10 +7,12 @@ body {
 }
 
 h1 {
+    font-size: 3em;
     color: white;
     -webkit-text-stroke-width: 2px;
     -webkit-text-stroke-color: teal;
-    font-family: Impact, Haettenschweiler, 'Arial Bold';
+    /* font-family: Impact, Haettenschweiler, 'Arial Bold'; */
+    font-family: cursive;
 }
 
 #error, .addAnimal {
