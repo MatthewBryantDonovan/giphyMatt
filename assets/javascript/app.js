@@ -39,7 +39,6 @@ function gimmeGifs(animal) {
 
     if (animal == "Favorites") {
         $("#gifSpam").empty();
-        console.log(favorites);
 
         for (var index = 0; index < favorites.length; index++) {
             $("#gifSpam").prepend(favorites[index]);
@@ -103,7 +102,6 @@ function gimmeGifs(animal) {
 
         }
 
-        console.log(response);
     });
 
 };
@@ -114,14 +112,12 @@ function usersAnimal() {
 
     var userAnimal = $("#get-animal").val().trim();
     $("#get-animal").val("");
-    console.log(userAnimal);
     var lowerAnimals = [];
     for (var index = 0; index < animals.length; index++) {
 
         lowerAnimals.push(animals[index].toLowerCase());
 
     }
-    console.log(lowerAnimals);
 
 
     $.ajax({
@@ -187,16 +183,8 @@ function addToFav() {
         $(button).html(("<i class='fas fa-heart'></i>"));
 
         for (let index = 0; index < favorites.length; index++) {
-
-            console.log("vvvvvvvvv");
-            console.log("ran as add");
-
-            console.log("a : " + $(button).attr("class"));
-            console.log("b : " + favorites[index][0].childNodes[2].className);
-            console.log("^^^^^^^^");
             if ($(button).attr("class") == favorites[index][0].childNodes[2].className) {
                 favorites = favorites.splice(index, 1);
-                console.log("removed a thing");
 
             }
 
@@ -209,22 +197,13 @@ function addToFav() {
         });
         $(button).html(("<i class='far fa-heart'></i>"));
         if (favorites.length == 1) {
-            console.log("was 1 left");
 
             favorites = [];
         } else {
             for (let index = 0; index < favorites.length; index++) {
-                console.log("vvvvvvvvv");
-                console.log("ran as remove");
-
-                console.log("a : " + $(button).attr("class"));
-                console.log("b : " + favorites[index][0].childNodes[2].className);
-                console.log("^^^^^^^^");
-
 
                 if ($(button).attr("class") == favorites[index][0].childNodes[2].className) {
                     favorites.splice(index, 1);
-                    console.log("removed a thing");
                 }
 
             }
@@ -232,7 +211,6 @@ function addToFav() {
 
     }
 
-    console.log(favorites);
 
 
 
@@ -240,7 +218,10 @@ function addToFav() {
 
 
 //initial run to make the default animals appear
+
+$(document).ready( function(){
 makeBtns();
+});
 
 // TODO: below-
 // add favorites to the main array. assign it an id to be used for running it and coloring it red
