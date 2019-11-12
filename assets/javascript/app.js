@@ -1,10 +1,12 @@
-var animals = ["Cat", "Shark", "Whale", "Panda", "Bear", "Giraffe"];
+var animals = ["Favorites", "Cat", "Shark", "Whale", "Panda", "Bear", "Giraffe"];
+var favorites = [];
 // ratings G/PG/PG-13/R
 
 // make buttons for every animal
 function makeBtns() {
     $("#btnSpam").empty();
     for (var i = 0; i < animals.length; i++) {
+
         var animalBtn = $("<button>").attr("class", "btn btn-info m-3");
         animalBtn.addClass("letter-button letter letter-button-color");
         animalBtn.attr({
@@ -12,6 +14,11 @@ function makeBtns() {
             "onclick": "btnAnimal()",
         });
         animalBtn.text(animals[i]);
+
+        if (i == 0) {
+            animalBtn.attr("id", "favBtn");
+        }
+
         $("#btnSpam").append(animalBtn);
     }
 };
@@ -29,11 +36,21 @@ userInput.addEventListener("keyup", function (event) {
 // when animal button is clicked populate still-gifs
 function gimmeGifs(animal) {
 
+
+    if (animal == "Favorites") {
+        $("#gifSpam").empty();
+        console.log(favorites);
+
+        for (var index = 0; index < favorites.length; index++) {
+            $("#gifSpam").prepend(favorites[index]);
+        }
+
+        return
+    }
     $("#gifSpam").empty();
 
     var queryItem = animal;
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + queryItem + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13";
-
 
     $.ajax({
         url: queryURL,
@@ -54,12 +71,34 @@ function gimmeGifs(animal) {
                 "onclick": "stateTrans()",
             });
 
-            var divBox = $("<div>")
+            var divBox = $("<div>").addClass(animal + "-" + i + "div");
             divBox.addClass("divBox");
             var newnew = $("<p>").text("Rating : " + response.data[i].rating);
             newnew.addClass("rating");
             divBox.append(newnew);
             divBox.append(imgSpam);
+            var likeBefore = false;
+            for (let index = 0; index < favorites.length; index++) {
+                if (favorites[index][0].childNodes[2].className == (animal + "-" + i)) {
+                    var heart = $("<button>").attr({
+                        "id": "heartBtn",
+                        "onclick": "addToFav()",
+                        "data-liked": "yes"
+                    }).html("<i class='fas fa-heart' onclick='addToFav()' data-liked='child'></i>"); // fas fa-heart for solid
+                    heart.addClass(animal + "-" + i);
+                    divBox.append(heart);
+                    likeBefore = true;
+                }
+            }
+            if (likeBefore == false) {
+                var heart = $("<button>").attr({
+                    "id": "heartBtn",
+                    "onclick": "addToFav()",
+                    "data-liked": "no"
+                }).html("<i class='far fa-heart' onclick='addToFav()' data-liked='child'></i>"); // fas fa-heart for solid
+                heart.addClass(animal + "-" + i);
+                divBox.append(heart);
+            }
             $("#gifSpam").prepend(divBox);
 
         }
@@ -125,6 +164,77 @@ function stateTrans() {
             "src": currentStillUrl,
         });
     }
+}
+
+
+// add favs
+function addToFav() {
+
+
+    if (event.target.tagName == "I") {
+        var button = $(event.target).parent();
+    } else {
+        var button = event.target;
+    }
+    console.log("should be button" + button);
+
+
+    if ($(button).attr("data-liked") == "no") {
+        $(button).attr({
+            "data-liked": "yes",
+        });
+        $(button).html(("<i class='fas fa-heart'></i>"));
+
+        for (let index = 0; index < favorites.length; index++) {
+
+            console.log("vvvvvvvvv");
+            console.log("ran as add");
+
+            console.log("a : " + $(button).attr("class"));
+            console.log("b : " + favorites[index][0].childNodes[2].className);
+            console.log("^^^^^^^^");
+            if ($(button).attr("class") == favorites[index][0].childNodes[2].className) {
+                favorites = favorites.splice(index, 1);
+                console.log("removed a thing");
+
+            }
+
+        }
+
+        favorites.push($(button).parent());
+    } else if ($(button).attr("data-liked") == "yes") {
+        $(button).attr({
+            "data-liked": "no",
+        });
+        $(button).html(("<i class='far fa-heart'></i>"));
+        if (favorites.length == 1) {
+            console.log("was 1 left");
+
+            favorites = [];
+        } else {
+            for (let index = 0; index < favorites.length; index++) {
+                console.log("vvvvvvvvv");
+                console.log("ran as remove");
+
+                console.log("a : " + $(button).attr("class"));
+                console.log("b : " + favorites[index][0].childNodes[2].className);
+                console.log("^^^^^^^^");
+
+
+                if ($(button).attr("class") == favorites[index][0].childNodes[2].className) {
+                    favorites.splice(index, 1);
+                    console.log("removed a thing");
+                }
+
+            }
+        }
+
+    }
+
+    console.log(favorites);
+
+
+
 }
 
 

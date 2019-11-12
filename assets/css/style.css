@@ -15,13 +15,30 @@
 
 .rating {
     position: relative;
-    top: 80%;
+    top: 70%;
     left: 50%;
     width: 100%;
     height: 30%;
     text-align: center;
     padding: 10%;
     transform: translate(-50%, -50%);
+}
+
+#heartBtn {
+    color: red;
+    position: relative;
+    left: -25%;
+    width: 10%;
+    height: 10%;
+    padding-right: 10%;
+    padding-bottom: 12.5%;
+    text-align: center;
+    transform: translate(-50%, 175%); 
+}
+
+#favBtn {
+    background: red;
+    border: 2px solid black;
 }
 
 .divBox {
