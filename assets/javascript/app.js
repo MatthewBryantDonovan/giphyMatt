@@ -135,7 +135,7 @@ function usersAnimal() {
 
 
     $.ajax({
-        url: "http://api.giphy.com/v1/gifs/search?q=" + userAnimal + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13",
+        url: "https://api.giphy.com/v1/gifs/search?q=" + userAnimal + "&api_key=dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN&limit=10&rating=PG-13",
         method: "GET"
     }).then(function (response) {
         if (userAnimal != "" && !lowerAnimals.includes(userAnimal.toLowerCase()) && response.data.length != 0) {
