@@ -26,12 +26,9 @@ h1 {
 .imgs {
     height: 150px;
     width: 150px;
-    position: relative;
-    top: 80%;
-    left: 50%;
     text-align: center;
     padding: 10%;
-    transform: translate(-50%, -50%);
+    transform: translate(15%, -50%);
 }
 
 .rating {
