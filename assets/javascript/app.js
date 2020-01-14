@@ -13,7 +13,7 @@ function makeBtns() {
         animalBtn.addClass("letter-button letter letter-button-color");
         animalBtn.attr({
             "data-animal": animals[i],
-            "onclick": "btnAnimal()",
+            "onclick": "btnAnimal()"
         });
         animalBtn.text(animals[i]);
 
@@ -23,7 +23,7 @@ function makeBtns() {
 
         $("#btnSpam").append(animalBtn);
     }
-};
+}
 
 // if enter is pressed in the input field act as if it was submitted
 var userInput = document.getElementById("get-animal");
@@ -47,7 +47,7 @@ function gimmeGifs(animal) {
         }
         lastClicked = "null";
         lastStartPoint = 0;
-        return
+        return;
     }
     var queryItem = animal;
 
@@ -79,7 +79,7 @@ function gimmeGifs(animal) {
                 "data-state": "still",
                 "data-still-url": response.data[i].images.original_still.url,
                 "data-gif-url": response.data[i].images.original.url,
-                "onclick": "stateTrans()",
+                "onclick": "stateTrans()"
             });
 
             var divBox = $("<div>").addClass(animal + "-" + (lastStartPoint+i) + "div");
@@ -118,7 +118,7 @@ function gimmeGifs(animal) {
 
     lastClicked = animal;
 
-};
+}
 
 // add the new animal from the users input
 function usersAnimal() {
@@ -142,9 +142,9 @@ function usersAnimal() {
             animals.push(userAnimal);
             makeBtns();
         } else if (response.data.length == 0) {
-            $("#error").text("That animal didn't pull up any results!")
+            $("#error").text("That animal didn't pull up any results!");
         } else {
-            $("#error").text("That animal already is available!")
+            $("#error").text("That animal already is available!");
         }
     });
 
@@ -154,7 +154,7 @@ function usersAnimal() {
 //grab the animal name for the button and give it to gimmeGifs
 function btnAnimal() {
     $("#error").empty();
-    var defaultBtnAnimal = event.target.getAttribute("data-animal")
+    var defaultBtnAnimal = event.target.getAttribute("data-animal");
     gimmeGifs(defaultBtnAnimal);
 }
 
@@ -168,18 +168,18 @@ function stateTrans() {
     if (currentState == "still") {
         $(event.target).attr({
             "data-state": "gifMode",
-            "src": currentGifUrl,
+            "src": currentGifUrl
         });
     } else {
         $(event.target).attr({
             "data-state": "still",
-            "src": currentStillUrl,
+            "src": currentStillUrl
         });
     }
 }
 
 
-// add favs
+// add the gif to the favorites array
 function addToFav() {
 
 
@@ -192,26 +192,23 @@ function addToFav() {
 
     if ($(button).attr("data-liked") == "no") {
         $(button).attr({
-            "data-liked": "yes",
+            "data-liked": "yes"
         });
         $(button).html(("<i class='fas fa-heart'></i>"));
 
         for (let index = 0; index < favorites.length; index++) {
             if ($(button).attr("class") == favorites[index][0].childNodes[2].className) {
                 favorites = favorites.splice(index, 1);
-
             }
-
         }
 
         favorites.push($(button).parent());
     } else if ($(button).attr("data-liked") == "yes") {
         $(button).attr({
-            "data-liked": "no",
+            "data-liked": "no"
         });
         $(button).html(("<i class='far fa-heart'></i>"));
         if (favorites.length == 1) {
-
             favorites = [];
         } else {
             for (let index = 0; index < favorites.length; index++) {
@@ -219,15 +216,9 @@ function addToFav() {
                 if ($(button).attr("class") == favorites[index][0].childNodes[2].className) {
                     favorites.splice(index, 1);
                 }
-
             }
         }
-
     }
-
-
-
-
 }
 
 
@@ -236,33 +227,3 @@ function addToFav() {
 $(document).ready( function(){
 makeBtns();
 });
-
-// TODO: below-
-// add favorites to the main array. assign it an id to be used for running it and coloring it red
-// create a button on each gif div that toggles on or off for favorites
-// if toggle is on push it into a new array.
-// when favoites is clicked have it run the gimme gifs but have an if seeing if favorites was clicked then return out after.
-
-/* # GifTastic
-
-my giphy API key below -
-dAY3n2gyWacdsBSXbo3lp44fHPJeSRcN
-
-![GIPHY](Images/1-giphy.jpg)
-
-[Giphy API](https://developers.giphy.com/docs/).
-
-2. **[Watch the demo video](https://youtu.be/BqreERTLjgQ)**
-
-### Instructions - bonus
-
-2. Allow users to request additional gifs to be added to the page.
-   * Each request should ADD 10 gifs to the page, NOT overwrite the existing gifs.
-
-   ### Create a README.md
-
-Add a `README.md` to your repository describing the project. Here are some resources for creating your `README.md`. Here are some resources to help you along the way:
-
-* [About READMEs](https://help.github.com/articles/about-readmes/)
-
-* [Mastering Markdown](https://guides.github.com/features/mastering-markdown/) */
